@@ -27,3 +27,6 @@ The overall run time complexity should be O(log (m+n)).
 - 0 <= n <= 1000
 - 1 <= m + n <= 2000
 - -10<sup>6</sup> <= nums1[i], nums2[i] <= 10<sup>6</sup>
+
+
+[Must see Editorial](https://leetcode.com/problems/median-of-two-sorted-arrays/editorial/)
