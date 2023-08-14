@@ -174,4 +174,91 @@ private:
 };
 ```
 
+# Quick Select :
+Also known as **Hoare's selection algorithm**, is an algorithm for finding the kth smallest element in an unordered list. It is significant because it has an average runtime of O(n).
+
+Quickselect uses the same idea as Quicksort. First, we choose a pivot index. The most common way to choose the pivot is random. We partition nums into 3 sections: elements equal to the pivot, elements greater than the pivot, and elements less than the pivot.
+
+Next, we count the elements in each section. Let's denote the sections as follows:
+
+left is the section with elements less than the pivot
+mid is the section with elements equal to the pivot
+right is the section with elements greater than the pivot
+Quickselect is normally used to find the kth 
+th
+  smallest element, but we want the kth
+th
+  largest. To account for this, we will swap what left and right represent - left will be the section with elements greater than the pivot and right will be the section with elements less than the pivot.
+
+If the number of elements in left is greater than or equal to k, the answer must be in left - any other element would be less than the kth
+  largest element. We restart the process in left.
+
+
+
+If the number of elements in left and mid is less than k, the answer must be in right - any element in left or mid would not be large enough to be the kth
+  largest element. We restart the process in right.
+
+
+
+There's one extra step if the answer is in right. When we go to search in right, we are effectively "deleting" the elements in left and mid (since they will never be considered again). Because the elements in left and mid are greater than the answer, deleting them means we must shift k. Let's say we're looking for the 8th
+  greatest element, but then we delete the 4 greatest elements. In the remaining data, we would be looking for the 4th
+th
+  greatest element, not the 8th
+th
+ . Therefore, we need to subtract the length of left and mid from k when we search in right.
+
+We don't need to modify k when we search in left because when we search in left, we delete elements smaller than the answer, which doesn't affect k.
+
+
+
+If the answer is in neither left or right, it must be in mid. Since mid only has elements equal to the pivot, the pivot must be the answer.
+
+The easiest way to implement this repetitive process is by using recursion.
+
+Algorithm
+
+Note: The implementation we use here is not a standard Quickselect implementation. We will be using slightly more space (still the same complexity), but in exchange, we will be writing significantly less code.
+
+Define a quickSelect function that takes arguments nums and k. This function will return the kth the greatest element in nums (the nums and k given to it as input, not the original nums and k).
+
+Select a random element as the pivot.
+Create left, mid, and right as described above.
+If k <= left.length, return quickSelect(left, k).
+If left.length + mid.length < k, return quickSelect(right, k - left.length - mid.length).
+Otherwise, return pivot.
+Call quickSelect with the original nums and k, and return the answer.
+
+```
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        return quickSelect(nums,k);
+    }
+
+    int quickSelect(vector<int>& nums, int k){
+        int pivot = nums[rand()%nums.size()];
+        vector<int> left, right, mid;
+
+         for (int num: nums) {
+            if (num > pivot) {
+                left.push_back(num);
+            } else if (num < pivot) {
+                right.push_back(num);
+            } else {
+                mid.push_back(num);
+            }
+        }
+        
+        if(k <= left.size()){
+            return quickSelect(left,k);
+        }
+        if(k > left.size() + mid.size()){
+            return quickSelect(right, k-left.size()-mid.size());
+        }
+        return pivot;
+    }
+};
+
+```
+
 </code>
